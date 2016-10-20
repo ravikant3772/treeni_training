@@ -1,0 +1,227 @@
+
+use CourseDb
+
+> show collections
+answers
+assign_question_rel
+assignment
+course
+questions
+system.indexes
+user
+user_assign_rel
+user_course_rel
+
+
+db.course.aggregate([
+{
+	$match:{"course_id":1}
+},
+{
+	$lookup:{
+			from:"user_course_rel",
+			localField:"_id",
+			foreignField:"course_id",
+			as:"course_user"
+		}
+}
+])
+
+assert: command failed: {
+	"errmsg" : "exception: Unrecognized pipeline stage name: '$lookup'",
+	"code" : 16436,
+	"ok" : 0
+} : aggregate failed
+Error: command failed: {
+	"errmsg" : "exception: Unrecognized pipeline stage name: '$lookup'",
+	"code" : 16436,
+	"ok" : 0
+} : aggregate failed
+    at Error (<anonymous>)
+    at doassert (src/mongo/shell/assert.js:11:14)
+    at Function.assert.commandWorked (src/mongo/shell/assert.js:254:5)
+    at DBCollection.aggregate (src/mongo/shell/collection.js:1278:12)
+    at (shell):1:11
+2016-10-19T08:57:16.466+0530 E QUERY    Error: command failed: {
+	"errmsg" : "exception: Unrecognized pipeline stage name: '$lookup'",
+	"code" : 16436,
+	"ok" : 0
+} : aggregate failed
+    at Error (<anonymous>)
+    at doassert (src/mongo/shell/assert.js:11:14)
+    at Function.assert.commandWorked (src/mongo/shell/assert.js:254:5)
+    at DBCollection.aggregate (src/mongo/shell/collection.js:1278:12)
+    at (shell):1:11 at src/mongo/shell/assert.js:13
+
+
+
+var a=db.user_course_rel.find({user_id:1})
+var b=a.next()
+var c= db.course.find({_id:{$in: b['course_id']}})
+
+a.forEach(function(row))
+{
+	print row
+}
+var b=a.next()
+var c= db.course.find({_id:{$in: b['course_id']}})
+Error: error: {
+	"$err" : "Can't canonicalize query: BadValue $in needs an array",
+	"code" : 17287
+}
+
+var a=db.user_course_rel.find({user_id:1})
+a.forEach(function( aRow )
+{
+   
+      aRow.course_id.forEach( function( item )
+      {
+	    var aNewItem = db.course.find{ _id: parseInt(item) };
+	    
+      });
+	   
+});
+
+
+db.user_course_rel.find({course_id:1}).forEach( function(myDoc) { db.user.find({_id:myDoc.user_id}).forEach(function(doc2){print("user  "+doc2.name);}); } );
+
+
+db.user_course_rel.find({user_id:1}).forEach( function(myDoc) { db.course.find({_id:myDoc.course_id}).forEach(function(doc2){print("course "+doc2.name);}); } );
+
+db.assignment.find( { course_id: { $in: db.user_course_rel.distinct("course_id",{"user_id" : 1}) } } )
+
+
+db.user_assign_rel.find({user_id:1}).forEach( function(myDoc) { db.course.find({_id:myDoc.course_id}).forEach(function(doc2){print("course "+doc2.name);}); } );
+
+db.user_assign_rel.findOne({user_id:1}).forEach( function(myDoc) 
+{ 
+	db.course.find({_id:myDoc.course_id}).forEach(function(doc2)
+	{	print("course "+doc2.name );			
+	});
+	
+	db.assignment.find({_id:myDoc.assign_id}).forEach(function(doc2)
+	{	print("assignment "+doc2.name );
+	});	
+
+});
+
+
+
+
+
+db.assignment.find({ course_id: { $in: db.user_course_rel.distinct("course_id",{"user_id" : 1}) } } ).forEach(function(doc)
+{
+	a = true
+	if(db.user_assign_rel.find({assign_id:doc._id}).count()==db.assign_question_rel.find({assign_id:doc._id}).count())
+	{
+		 
+		print('ok')
+	}
+	else
+	{
+		a = false 		
+	}
+		
+});
+
+
+db.assignment.find({ user_id: { $in: db.user_course_rel.distinct("user_id",{"course_id" : 1}) } } ).forEach(function(doc)
+{
+	a = true
+	if(db.user_assign_rel.find({assign_id:doc._id}).count()==db.assign_question_rel.find({assign_id:doc._id}).count())
+	{
+		 
+		print('ok')
+	}
+	else
+	{
+		a = false 		
+	}
+		
+});
+
+
+
+var a=db.user_course_rel.distinct("user_id",{course_id:1})
+var b=db.assignment.distinct("_id",{course_id:1})
+var c=db.user_assign_rel.find({user_id:{$in: a}, assign_id:{$in: a}})
+
+db.user_assign_rel.aggregate(
+    [ 
+	{ $match : { user_id : {$in: a} ,assign_id:{$in: b}  } },
+	
+	{"$group": {_id:"$user_id", number: {$sum: 1}}}     
+	{"$group": {_id:"$user_id", number: {$sum: 1}}}
+	]
+);
+
+a=db.user_assign_rel.aggregate(     [  { $match : { user_id : {$in: a},assign_id:{$in: b} } }, {"$group": {_id:"$user_id", number: {$sum: 1}}}       ] );
+
+c.forEach(function (row)
+{	
+	
+	if(db.user_assign_rel.find({assign_id:row.assign_id,user_id:row.user_id}).count()==db.assign_question_rel.find({assign_id:row.assign_id}).count())
+	{
+		print('ok');		
+	}
+		
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+successful command:
+
+1. db.user_course_rel.find({user_id:1}).forEach( function(myDoc) { db.course.find({_id:myDoc.course_id}).forEach(function(doc2){print("course "+doc2.name);}); } );
+
+2. db.assignment.find({ course_id: { $in: db.user_course_rel.distinct("course_id",{"user_id" : 1}) } } ).forEach(function(doc){print ("course '"+doc.course_id+"' assignment: '"+doc.name+"' no of answered questions: "+ db.user_assign_rel.find({assign_id:doc._id}).count());});
+
+3.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,130 @@
+mongo
+db.createCollection("user")
+db.createCollection("course")
+db.user.insert({_id:1,name:"Ravi",adrs:"pune"})
+db.user.insert({_id:2,name:"omkar",adrs:"kothrud"})
+db.user.insert({_id:3,name:"aviraj",adrs:"deccan"})
+db.user.insert({_id:4,name:"sumit",adrs:"sangali"})
+db.user.insert({_id:5,name:"manthan",adrs:"baramati"})
+
+db.course.insert({_id:1,name:"maths"})
+db.course.insert({_id:2,name:"physics"})
+db.course.insert({_id:3,name:"chemistry"})
+db.course.insert({_id:4,name:"biology"})
+
+db.user_course_rel.insert({_id:1,user_id:1,course_id:1 })
+db.user_course_rel.insert({_id:2,user_id:1,course_id:2 })
+db.user_course_rel.insert({_id:3,user_id:2,course_id:1 })
+db.user_course_rel.insert({_id:4,user_id:2,course_id:3 })
+db.user_course_rel.insert({_id:5,user_id:3,course_id:2 })
+db.user_course_rel.insert({_id:6,user_id:4,course_id:4})
+db.user_course_rel.insert({_id:7,user_id:5,course_id:4})
+
+db.questions.insert({_id:2,course_id:1,ques:"question 2 for maths?"})
+db.questions.insert({_id:3,course_id:1,ques:"question 3 for maths?"})
+db.questions.insert({_id:4,course_id:2,ques:"question 1 for physics?"})
+db.questions.insert({_id:5,course_id:2,ques:"question 2 for physics?"})
+db.questions.insert({_id:6,course_id:2,ques:"question 3 for physics?"})
+db.questions.insert({_id:7,course_id:2,ques:"question 4 for physics?"})
+db.questions.insert({_id:8,course_id:3,ques:"question 1 for chemistry?"})
+db.questions.insert({_id:9,course_id:3,ques:"question 2 for chemistry?"})
+db.questions.insert({_id:10,course_id:3,ques:"question 3 for chemistry?"})
+db.questions.insert({_id:11,course_id:3,ques:"question 4 for chemistry?"})
+db.questions.insert({_id:12,course_id:3,ques:"question 5 for chemistry?"})
+db.questions.insert({_id:13,course_id:4,ques:"question 1 for biology ?"})
+db.questions.insert({_id:14,course_id:4,ques:"question 2 for biology ?"})
+db.questions.insert({_id:1,course_id:1,ques:"question 1"})
+
+db.answers.insert({_id:1,quest_id:1, answer:"ans 1 for q 1"})
+db.answers.insert({_id:2,quest_id:1, answer:"ans 2 for q 1"})
+db.answers.insert({_id:3,quest_id:2, answer:"ans 1 for q 2"})
+db.answers.insert({_id:4,quest_id:3, answer:"ans 1  for q 3"})
+db.answers.insert({_id:5,quest_id:3, answer:"ans 2  for q 3"})
+db.answers.insert({_id:6,quest_id:4, answer:"ans 1  for q 4"})
+db.answers.insert({_id:7,quest_id:4, answer:"ans 2  for q 4"})
+db.answers.insert({_id:8,quest_id:5, answer:"ans 1  for q 5"})
+db.answers.insert({_id:9,quest_id:6, answer:"ans 1  for q 6"})
+db.answers.insert({_id:10,quest_id:6, answer:"ans 2  for q 6"})
+db.answers.insert({_id:11,quest_id:7, answer:"ans 1  for q 7"})
+db.answers.insert({_id:12,quest_id:7, answer:"ans 2  for q 7"})
+db.answers.insert({_id:13,quest_id:7, answer:"ans 3  for q 7"})
+db.answers.insert({_id:14,quest_id:10, answer:"ans 1  for q 10"})
+db.answers.insert({_id:15,quest_id:11, answer:"ans 1  for q 11"})
+db.answers.insert({_id:16,quest_id:12, answer:"ans 1  for q 12"})
+db.answers.insert({_id:17,quest_id:13, answer:"ans 1  for q 13"})
+db.answers.insert({_id:18,quest_id:9, answer:"ans 1  for q 9"})
+db.answers.insert({_id:19,quest_id:8, answer:"ans 1  for q 8"})
+db.answers.insert({_id:20,quest_id:11, answer:"ans 2  for q 11"})
+db.answers.insert({_id:21,quest_id:12, answer:"ans 2 for q 12"})
+
+db.assign_question_rel.insert({assign_id:1, quest_id:1})
+db.assign_question_rel.insert({assign_id:1, quest_id:2})
+db.assign_question_rel.insert({assign_id:3, quest_id:4})
+db.assign_question_rel.insert({assign_id:3, quest_id:5})
+db.assign_question_rel.insert({assign_id:3, quest_id:6})
+db.assign_question_rel.insert({assign_id:3, quest_id:7})
+db.assign_question_rel.insert({assign_id:2, quest_id:3})
+db.assign_question_rel.insert({assign_id:2, quest_id:1})
+db.assign_question_rel.insert({assign_id:4, quest_id:9})
+db.assign_question_rel.insert({assign_id:4, quest_id:10})
+db.assign_question_rel.insert({assign_id:5, quest_id:11})
+db.assign_question_rel.insert({assign_id:5, quest_id:12})
+db.assign_question_rel.insert({assign_id:6, quest_id:13})
+db.assign_question_rel.insert({assign_id:6, quest_id:14})
+
+db.assignment.insert({_id:1,course_id:1,name:"assgn 1 for c 1"})
+db.assignment.insert({_id:2,course_id:1,name:"assgn 2 for c 1"})
+db.assignment.insert({_id:3,course_id:2,name:"assgn 1 for c 2"})
+db.assignment.insert({_id:4,course_id:3,name:"assgn 1 for c 3"})
+db.assignment.insert({_id:5,course_id:3,name:"assgn 2 for c 3"})
+db.assignment.insert({_id:6,course_id:4,name:"assgn 1 for c 4"})
+
+db.user_assign_rel.insert({user_id:1,assign_id:1, quest_id:1,user_answer:"u1a1q1"})
+db.user_assign_rel.insert({user_id:1,assign_id:1, quest_id:2,user_answer:"u1a1q2"})
+db.user_assign_rel.insert({user_id:3,assign_id:3, quest_id:4,user_answer:"u3a3q4"})
+db.user_assign_rel.insert({user_id:3,assign_id:3, quest_id:5,user_answer:"u3a3q5"})
+db.user_assign_rel.insert({user_id:3,assign_id:3, quest_id:6,user_answer:"u3a3q6"})
+db.user_assign_rel.insert({user_id:3,assign_id:3, quest_id:7,user_answer:"u3a3q7"})
+db.user_assign_rel.insert({user_id:1,assign_id:2, quest_id:3,user_answer:"u1a2q3"})
+db.user_assign_rel.insert({user_id:1,assign_id:2, quest_id:1,user_answer:"u1a2q1"})
+db.user_assign_rel.insert({user_id:2,assign_id:4, quest_id:9,user_answer:"u2a4q9"})
+db.user_assign_rel.insert({user_id:2,assign_id:4, quest_id:10,user_answer:"u2a4q10"})
+db.user_assign_rel.insert({user_id:2,assign_id:5, quest_id:11,user_answer:"u2a5q11"})
+db.user_assign_rel.insert({user_id:2,assign_id:5, quest_id:12,user_answer:"u2a5q12"})
+db.user_assign_rel.insert({user_id:4,assign_id:6, quest_id:13,user_answer:"u4a6q13"})
+db.user_assign_rel.insert({user_id:4,assign_id:6, quest_id:14,user_answer:"u4a6q14"})
+
+db.user_course_rel.insert({user_id:1,course_id:1 })
+db.user_course_rel.insert({user_id:1,course_id:2 })
+db.user_course_rel.insert({user_id:2,course_id:1 })
+db.user_course_rel.insert({user_id:2,course_id:3 })
+db.user_course_rel.insert({user_id:3,course_id:2 })
+db.user_course_rel.insert({user_id:4,course_id:4})
+db.user_course_rel.insert({user_id:5,course_id:4})
+
+
+db.user_assign_rel.insert({user_id:1,assign_id:3, quest_id:4,user_answer:"abc"})
+db.user_assign_rel.insert({user_id:1,assign_id:3, quest_id:5,user_answer:"abc"})
+db.user_assign_rel.insert({user_id:1,assign_id:3, quest_id:6,user_answer:"abc"})
+db.user_assign_rel.insert({user_id:1,assign_id:3, quest_id:7,user_answer:"abc"})
+
+successful command:
+
+1. db.user_course_rel.find({user_id:1}).forEach( function(myDoc) { db.course.find({_id:myDoc.course_id}).forEach(function(doc2){print("course "+doc2.name);}); } );
+
+2. db.assignment.find({ course_id: { $in: db.user_course_rel.distinct("course_id",{"user_id" : 1}) } } ).forEach(function(doc){print ("course '"+doc.course_id+"' assignment: '"+doc.name+"' no of answered questions: "+ db.user_assign_rel.find({assign_id:doc._id}).count());});
+
+3.var a=db.user_course_rel.distinct("user_id",{course_id:1})
+var b=db.assignment.distinct("_id",{course_id:1})
+var count=0
+var c=db.user_assign_rel.aggregate(
+    [ 
+	{ $match : { user_id : {$in: a} ,assign_id:{$in: b}  } },
+	
+	{"$group": {_id:"$user_id", number: {$sum: 1}}},     
+	
+	]
+).forEach(function(row){count=count+1 });
+count
+
+
