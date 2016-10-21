@@ -1,9 +1,0 @@
-
-db.course.insert({_id:1,name:"maths",user_id:[1,2,3]})
-db.course.insert({_id:2,name:"phy",user_id:[1,2]})
-db.course.insert({_id:3,name:"chem",user_id:[2,3]})
-db.user.insert({_id:1,name:"Ravi",adrs:"pune", cours_id:[1,2,3]})
-db.user.insert({_id:2,name:"Raj",adrs:"pune", cours_id:[2,3]})
-db.user.insert({_id:3,name:"Ram",adrs:"pune", cours_id:[1,3]})
-
-
