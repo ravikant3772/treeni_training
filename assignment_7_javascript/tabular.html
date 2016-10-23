@@ -35,11 +35,13 @@
 <script>
 function Arr(a) {
     this.arr=a
+    
 }
 
 Arr.prototype.random = function()
-{    
-    for (var len = this.arr.length - 1; c > 0; c--)
+{   
+	
+    for (var len = this.arr.length - 1; len > 0; len--)
     {
           var ind = Math.floor(Math.random() * (len + 1));
           var t = this.arr[len];
@@ -87,9 +89,11 @@ $(document).ready(function(){
                 arr_css[i]=$(this).css("background-color");
                 i++;
           });
-
+          
           var arr_rand = new Arr(arr_id);
+          
           var arr = arr_rand.random();
+          
 
           for ( i = arr.length - 1; i >= 0; i--) {
 
