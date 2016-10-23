@@ -114,18 +114,17 @@ successful command:
 
 2. db.assignment.find({ course_id: { $in: db.user_course_rel.distinct("course_id",{"user_id" : 1}) } } ).forEach(function(doc){print ("course '"+doc.course_id+"' assignment: '"+doc.name+"' no of answered questions: "+ db.user_assign_rel.find({assign_id:doc._id}).count());});
 
-3.var a=db.user_course_rel.distinct("user_id",{course_id:2})
-var b=db.assignment.distinct("_id",{course_id:2})
+3.var a=db.user_course_rel.distinct("user_id",{course_id:1})
+var b=db.assignment.distinct("_id",{course_id:1})
 var count=0
 var c=db.user_assign_rel.aggregate(
     [ 
 	{ $match : { user_id : {$in: a} ,assign_id:{$in: b}  } },
 	
-	{ $group : { _id:"$user_id", number: {$sum: 1}       } },
-	
-	{ $group : { _id:"$_id", number: {$sum: 1}       } }     
+	{"$group": {_id:"$user_id", number: {$sum: 1}}},     
 	
 	]
-)
+).forEach(function(row){count=count+1 });
+count
 
 
