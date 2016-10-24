@@ -110,21 +110,111 @@ db.user_assign_rel.insert({user_id:1,assign_id:3, quest_id:7,user_answer:"abc"})
 
 successful command:
 
-1. db.user_course_rel.find({user_id:1}).forEach( function(myDoc) { db.course.find({_id:myDoc.course_id}).forEach(function(doc2){print("course "+doc2.name);}); } );
+1. 
+db.user_course_rel.aggregate([
+	{
+	    $match: { "user_id": 1}
+   	},
+ 	{
+	    $lookup:
+	    {
+		   from: "course",
+		   localField: "course_id",
+		   foreignField: "_id",
+		   as: "course_docs"
+	    }
+		},
+ 	{
+  	    $lookup:
+	    {
+		   from: "user",
+		   localField: "user_id",
+		   foreignField: "_id",
+		   as: "user_docs"
+	     }
+    	},
+ 	{	$unwind: "$course_docs"},
+ 
+ 	{	$unwind: "$user_docs"},
+ 
+ 	{
+ 	     $group: 
+	     {	
+		  _id:{ User : "$user_docs.name",course_id:"$course_docs._id",course: "$course_docs.name"}
+		 
+ 	      } 
+ 	},
+	{    "$group": 
+	     {    _id: "$_id.User",
+		  "Courses":{ "$push": { 
+				"Course_id": "$_id.course_id",
+				"Name": "$_id.course"
+			    }
+			}
+       	}}
+ ]).pretty();
 
-2. db.assignment.find({ course_id: { $in: db.user_course_rel.distinct("course_id",{"user_id" : 1}) } } ).forEach(function(doc){print ("course '"+doc.course_id+"' assignment: '"+doc.name+"' no of answered questions: "+ db.user_assign_rel.find({assign_id:doc._id}).count());});
 
-3.var a=db.user_course_rel.distinct("user_id",{course_id:1})
-var b=db.assignment.distinct("_id",{course_id:1})
+===================================================
+2. 
+db.user_assign_rel.aggregate([
+	{
+	    $match: { "user_id": 1}
+   	},
+ 	{
+	    $lookup:
+	    {
+		   from: "assignment",
+		   localField: "assign_id",
+		   foreignField: "_id",
+		   as: "assign_docs"
+	    }
+	},
+
+	{	$unwind: "$assign_docs"},
+
+ 	{
+  	    $lookup:
+	    {
+		   from: "course",
+		   localField: "assign_docs.course_id",
+		   foreignField: "_id",
+		   as: "course_docs"
+	     }
+    	},
+ 	
+ 
+ 	{	$unwind: "$course_docs"},
+       
+	{ 	$group :{	_id: {user:"$user_id","course":"$course_docs.name","assignment_id":"$assign_docs._id", "assignment":"$assign_docs.name"}, 
+				number: {$sum: 1}       
+			} 
+	},
+	{ 	$group :{	_id: {user:"$_id.user",course:"$_id.course"},
+				"Assignment":{ "$push": { 
+				"Assignment_id":"$_id.assignment_id",
+				"name": "$_id.assignment",
+				"No of Answered Questions": "$number"
+            },
+        }       } },
+	{ 	$group :{ _id:{user:"$_id.user",course:"$_id.course","assignment":"$Assignment"}} },
+ 	{	$sort : {"_id.user":1}}
+	
+]).pretty();
+
+====================================
+3.var a=db.user_course_rel.distinct("user_id",{course_id:2})
+var b=db.assignment.distinct("_id",{course_id:2})
 var count=0
 var c=db.user_assign_rel.aggregate(
     [ 
 	{ $match : { user_id : {$in: a} ,assign_id:{$in: b}  } },
 	
-	{"$group": {_id:"$user_id", number: {$sum: 1}}},     
+	{ $group : { _id:"$user_id", number: {$sum: 1}       } },
+	
+	{ $group : { _id:"$_id", number: {$sum: 1}       } }     
 	
 	]
-).forEach(function(row){count=count+1 });
-count
+)
 
 
