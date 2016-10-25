@@ -203,18 +203,68 @@ db.user_assign_rel.aggregate([
 ]).pretty();
 
 ====================================
-3.var a=db.user_course_rel.distinct("user_id",{course_id:2})
-var b=db.assignment.distinct("_id",{course_id:2})
-var count=0
-var c=db.user_assign_rel.aggregate(
-    [ 
-	{ $match : { user_id : {$in: a} ,assign_id:{$in: b}  } },
+3.
+var course=1;
+var answers=db.assignment.aggregate([
+	{
+	    $match: { "course_id": course}
+   	},
+ 	
+	{
+  	    $lookup:
+	    {
+		   from: "user_assign_rel",
+		   localField: "_id",
+		   foreignField: "assign_id",
+		   as: "user_docs"
+	     }
+    	},
+	{   $unwind: "$user_docs"},
 	
-	{ $group : { _id:"$user_id", number: {$sum: 1}       } },
-	
-	{ $group : { _id:"$_id", number: {$sum: 1}       } }     
-	
-	]
-)
+	{"$group": {_id:{user:"$user_docs.user_id", assign:"$user_docs.assign_id"}, number: {$sum: 1}}}, 	
+	 
+ 	
+]).toArray();
 
+var questions=db.assignment.aggregate([
+	{
+	    $match: { "course_id": course}
+   	},
+ 	
+	
+	{
+  	    $lookup:
+	    {
+		   from: "assign_question_rel",
+		   localField: "_id",
+		   foreignField: "assign_id",
+		   as: "question_docs"
+	     }
+    	},
+	{   $unwind: "$question_docs"},
+	{"$group": {_id:{assign:"$question_docs.assign_id"}, number: {$sum: 1}}}, 	
+	 
+ 	
+]).toArray();
+var total=0;
+answers.forEach(function(row){
+	
+	questions.forEach(function(row2){
+		
+		//print(row._id['user'] +' == '+row._id['assign'] +' == '+row2._id['assign']+' == '+ row.number+' == '+ row2.number);
+		
+		if(row._id['assign']==row2._id['assign'])
+		{
+			if(row.number ==  row2.number)
+			{
+				print('User:'+row._id['user']+' completed assignment no:'+ row._id['assign']);
+			}
+			else
+			{
+				print('User:'+row._id['user']+' not completed assignment no:'+ row._id['assign']);	
+			}
+		}
+		
+	});
+});
 
