@@ -1,6 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'shopgem'
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
+  s.executables << 'shopgem'
   s.date        = '2016-10-17'
   s.summary     = "mybooks!"
   s.description = "online book sellenig app"
